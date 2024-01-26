@@ -30,6 +30,11 @@ def getLogger(name=None):
 	logger.trace = functools.wraps(trace)(lambda msg, *args, **kwargs: trace(logger, msg, *args, **kwargs))
 	return logger
 
+def getStructuredLogger(name=None):
+	from . import structured_logging
+	logger = getLogger(name)
+	return structured_logging.StructuredLogger(logger)
+
 def basicConfig(**kwargs):
 	logging.basicConfig(**kwargs)
 	root_logger = logging.getLogger()
@@ -47,6 +52,12 @@ def basicConfig(**kwargs):
 
 class NiceFormatter(logging.Formatter):
 	def format(self, record):
+		if getattr(record, 'structured', False):
+			message = record.msg
+			data = getattr(record, 'structured_data', {})
+			record.msg = "%s %r"
+			record.args = (message, data)
+
 		level = max(filter(lambda lvl: record.levelno >= lvl, DEFAULT_STYLES.keys()))
 		record.level_label = DEFAULT_STYLES[level]['level_label']
 		record.style_begin = DEFAULT_STYLES[level]['style_begin']
