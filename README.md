@@ -25,3 +25,7 @@ Or:
 ```python
 import nice_logging as logging
 ```
+
+## Structured Logging
+
+nice_logging has support for rudimentary structured logging. If you use `getStructuredLogger` instead of `getLogger` (or instantiate a `StructuredLogger`), you will get a logger whose log functions take a single message, and any number of keyword arguments, which are aggregated in a single dict. The resulting `LogRecord` will have the attribute `structured` set to `True`, and `structured_data` to the dict.
