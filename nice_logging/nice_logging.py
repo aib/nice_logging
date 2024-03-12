@@ -40,7 +40,7 @@ def basicConfig(**kwargs):
 	root_logger = logging.getLogger()
 
 	for handler in root_logger.handlers:
-		if isinstance(handler, logging.StreamHandler):
+		if isinstance(handler, logging.StreamHandler) and not isinstance(handler, logging.FileHandler):
 			def_fmt = DEFAULT_STYLED_FORMAT
 		else:
 			def_fmt = DEFAULT_FORMAT
